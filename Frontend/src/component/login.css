@@ -1,0 +1,350 @@
+
+h2{
+	color: rgb(40, 27, 226);
+    font-weight: 700;
+    font-size: 15rem;
+    margin: 0;
+    line-height: 1;
+}
+
+h6 {
+    color: #666;
+    font-weight: normal;
+    font-size: 1.7rem;
+    margin: 0.rem 0 2rem 0;
+}
+h5{
+	height: 2rem;
+	display: flex;
+	justify-content: center;
+	color: rgba(0, 0, 0, 0.329);
+	font-size: 1rem;
+}	
+
+p{
+	color: black;
+	font-size: 1.3rem;
+}
+.email-input{
+	color: black;
+	background-color: #F3F3E0;
+	width: 100%;
+	padding: 1rem;
+	border: 2px solid #ccc;
+	border-radius: 8px;
+	margin-top: 0.5rem;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.password-input{
+	color: black;
+	background-color:#F3F3E0;
+	width: 100%;
+	padding: 1rem;
+	border: 2px solid #ccc;
+	border-radius: 8px;
+	margin-top: 0.5rem;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.remember-forgot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 1rem 0;
+}
+
+
+.remember-me {
+	color: #666;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+.forgot-password {
+    color: #0066cc;
+    text-decoration: none;
+    font-size: 0.9rem;
+	
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+.sign-in-btn {
+    width: 100%;
+    padding: 1rem;
+    background-color: #0066cc;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 1rem 0;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.ft-sign-in-btn {
+	color: rgb(26, 29, 165);
+    width: 100%;
+    padding: 0.50rem;
+    background-color:#F3F3E0;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+.sign-up-prompt a {
+    color: #0066cc;
+    text-decoration: none;
+}
+
+.sign-up-prompt a:hover {
+    text-decoration: underline;
+}
+
+.sign-up-prompt {
+    text-align: center;
+    margin-top: 2rem;
+    color: #666;
+}
+
+.bar {
+	/* display: flex; */
+	/* justify-content: center; */
+	/* align-items: center; */
+	/* margin-top: 1.5rem; */
+	border: 1px solid #ccc;
+	margin: 1.5rem;
+
+}
+
+.email-input.error,
+.password-input.error {
+	border-color: #ff4d4d;
+	background-color: #fee2e2;
+}
+
+
+.error-message {
+	color: #ff4d4d;
+	font-size: 0.9rem;
+	margin-top: 0.5rem;
+	font-weight: 500;
+}
+
+.email-input.error:focus,
+.password-input.error:focus {
+	border-color: #ef4444;
+	box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+@keyframes shake {
+	0% {
+		transform: translateX(0);
+	}
+	25% {
+		transform: translateX(-10px);
+	}
+	50% {
+		transform: translateX(10px);
+	}
+	75% {
+		transform: translateX(-5px);
+	}
+	100% {
+		transform: translateX(5px);
+	}
+}
+
+
+.email-input.error,
+.password-input.error {
+	animation: shake 0.3s ease-in-out;
+}
+
+.form-group
+{
+	margin-bottom: 1.5rem;
+	position: relative;
+}
+
+.form-group.has-error::after {
+	content: ' ';
+	position: absolute;
+	top: 50%;
+	right: 1rem;
+	transform: translateY(-50%);
+	width: 1rem;
+	height: 1rem;
+	background-color: #ff4d4d;
+	border-radius: 50%;
+}
+
+.error{
+	color: #ff4d4d;
+	font-size: 0.9rem;
+	margin-top: 0.5rem;
+	display: block;
+}
+
+.password-input + error 
+{
+	color: #ff4d4d;
+	animation : shake 0.3s ease-in-out;
+}
+
+.page {
+	display: flex;
+  	justify-content: space-evenly;
+  	width: 100%;
+  	min-height: 100vh; /* Changé de height à min-height */
+  	margin: 0 auto;
+  	background-color: #F3F3E0;
+  	overflow-y: auto; /* Ajout pour permettre le défilement */
+  }
+  
+  .login {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	width: 100%;        /* Change to 50% to split the space */
+	padding: 0 40px;
+	
+  }
+  
+  .image {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	width: 50%;        /* Change to 50% to split the space */
+	background-color: #F3F3E0;
+  }
+  
+  .image img {
+	width: 100%;       /* Slightly reduce to prevent overflow */
+	height: 100%;
+	object-fit: contain;
+	padding: 20px;
+  }
+  
+  /* Reset default margin and padding */
+  * {
+	
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+  }
+  
+  /* Add container for overall centering */
+  body {
+	/* display: flex; */
+	justify-content: center;
+	background-color: #F3F3E0;
+	min-height: 100vh;
+  }
+
+  /* Add container for overall centering */
+  .login-wrapper {
+	display: flex;
+  	flex-direction: column;
+  	justify-content: center;
+  	padding: 20px; /* Ajout de padding pour éviter que le contenu touche les bords */
+  	max-width: 450px; /* Limitation de la largeur maximale */
+  	width: 100%;
+  	margin: auto; /* Centrer le contenu */
+  }
+
+  @media only screen and (max-width: 1060px) {
+	.image {
+		display: none;
+	}
+  }
+
+  @media only screen and (max-width: 350px) {
+	.login {
+		display: none
+		}
+  };
+
+  @media only screen and (max-width: 768px) {
+	h2 {
+	  font-size: 2.5rem;
+	}
+	
+	h6 {
+	  font-size: 1.3rem;
+	}
+  }
+
+  .back-to-login:hover {
+	background-color: #0056b3;
+  }
+  
+  /* Ajoutez ces styles à votre login.css */
+
+.error-message {
+	background-color: #ffebee;
+	color: #c62828;
+	padding: 10px;
+	border-radius: 4px;
+	margin-bottom: 20px;
+	text-align: center;
+	width: 100%;
+  }
+  
+  .success-message {
+	background-color: #e8f5e9;
+	color: #2e7d32;
+	padding: 10px;
+	border-radius: 4px;
+	margin-bottom: 20px;
+	text-align: center;
+	width: 100%;
+  }
+  
+  .sign-in-btn:disabled {
+	opacity: 0.7;
+	cursor: not-allowed;
+  }
+
+  .login-container {
+	min-height: 100vh; /* Utilise la hauteur complète de la vue */
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	overflow-y: auto; /* Permet le défilement si nécessaire */
+  }
+  
+  .login-form {
+	margin: auto; /* Centre le formulaire */
+	width: 100%;
+	max-width: 400px; /* Limite la largeur sur les grands écrans */
+	padding: 20px;
+  }
+
+  form {
+	width: 100%;
+	max-width: 100%;
+  }
+
+  @media only screen and (max-width: 480px) {
+	.email-input, 
+	.password-input, 
+	.sign-in-btn,
+	.ft-sign-in-btn {
+	  padding: 0.8rem;
+	}
+	
+	h2 {
+	  font-size: 2rem;
+	}
+  }

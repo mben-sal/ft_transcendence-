@@ -1,0 +1,14 @@
+Django==5.1.5
+djangorestframework
+drf-yasg
+django-cors-headers
+psycopg2-binary
+requests==2.31.0
+djangorestframework-simplejwt
+django-cors-headers
+Pillow==10.1.0
+python-dateutil==2.8.2
+channels==4.0.0
+channels-redis==4.1.0
+daphne==4.0.0
+hvac

@@ -1,0 +1,112 @@
+/* static/css/chat.css - Updated with responsive styles */
+.chat-message {
+	max-width: 85%;
+	margin-bottom: 0.5rem;
+	position: relative;
+  }
+  
+  @media (min-width: 640px) {
+	.chat-message {
+	  max-width: 80%;
+	  margin-bottom: 0.75rem;
+	}
+  }
+  
+  @media (min-width: 768px) {
+	.chat-message {
+	  max-width: 70%;
+	  margin-bottom: 1rem;
+	}
+  }
+  
+  .chat-message.sent {
+	margin-left: auto;
+  }
+  
+  .chat-message.received {
+	margin-right: auto;
+  }
+  
+  .message-bubble {
+	padding: 0.5rem 0.75rem;
+	border-radius: 0.75rem;
+	position: relative;
+	word-wrap: break-word;
+  }
+  
+  @media (min-width: 640px) {
+	.message-bubble {
+	  padding: 0.75rem 1rem;
+	  border-radius: 1rem;
+	}
+  }
+  
+  .message-bubble.sent {
+	background-color: #3b82f6; /* blue-500 */
+	color: white;
+	border-bottom-right-radius: 0;
+  }
+  
+  .message-bubble.received {
+	background-color: #f3f4f6; /* gray-100 */
+	color: #111827; /* gray-900 */
+	border-bottom-left-radius: 0;
+  }
+  
+  .message-time {
+	font-size: 0.7rem;
+	opacity: 0.7;
+	margin-top: 0.15rem;
+  }
+  
+  @media (min-width: 640px) {
+	.message-time {
+	  font-size: 0.75rem;
+	  margin-top: 0.25rem;
+	}
+  }
+  
+  .message-time.sent {
+	color: #bfdbfe; /* blue-200 */
+	text-align: right;
+  }
+  
+  .message-time.received {
+	color: #6b7280; /* gray-500 */
+  }
+  
+  /* Add responsive styling for chat container */
+  .chat-container {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	overflow: hidden;
+  }
+  
+  /* Responsive media queries for different screen sizes */
+  @media (max-width: 640px) {
+	.chat-sidebar {
+	  width: 100%;
+	  height: auto;
+	}
+	
+	.chat-main {
+	  height: calc(100vh - 120px);
+	}
+  }
+  
+  @media (min-width: 641px) and (max-width: 768px) {
+	.chat-sidebar {
+	  width: 220px;
+	}
+  }
+  
+  @media (min-width: 769px) {
+	.chat-container {
+	  flex-direction: row;
+	}
+	
+	.chat-sidebar {
+	  width: 280px;
+	}
+  }

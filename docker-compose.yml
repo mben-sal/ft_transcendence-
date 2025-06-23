@@ -1,0 +1,226 @@
+version: '3.8'
+
+services:
+#-------------------------------------------------------------------
+#----------------------------- DATABASE -----------------------------
+  database:
+    build: ./database
+    image: database
+    container_name: database
+    depends_on:
+      - vault
+    volumes:
+      - ./database/create-database.sh:/usr/local/bin/create-database.sh
+      - ./database/healthcheck.sh:/usr/local/bin/healthcheck.sh
+      - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - .env
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+    restart: on-failure
+#-------------------------------------------------------------------
+#----------------------------- REDIS -----------------------------
+  redis:
+    container_name: redis
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: always
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+#-------------------------------------------------------------------
+#----------------------------- ADMINER -----------------------------
+  adminer:
+    container_name: adminer
+    image: adminer:4.8.1-standalone
+    ports:
+      - "8082:8080"
+    networks:
+      - app-network
+    depends_on:
+      database:
+        condition: service_healthy
+    restart: always
+#-------------------------------------------------------------------
+#----------------------------- MAILHOG -----------------------------
+  mailhog:
+    container_name: mailhog
+    image: mailhog/mailhog:latest
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - app-network
+    restart: always
+
+#-------------------------------------------------------------------
+#----------------------------- SWAGGER -----------------------------
+  swagger:
+    container_name: swagger
+    image: swaggerapi/swagger-ui:latest
+    ports:
+      - "8081:8080"
+    environment:
+      - SWAGGER_JSON=/app/swagger.json
+    volumes:
+      - ./Backend/swagger.json:/app/swagger.json
+    networks:
+      - app-network
+    restart: always
+#-------------------------------------------------------------------
+#----------------------------- BACKEND -----------------------------
+  backend:
+    container_name: backend
+    build: ./backend
+    image: backend
+    volumes:
+      - ./backend/backend:/app/backend
+      - static_volume:/app/backend/static
+      - media_volume:/app/backend/media
+    command: >
+      sh -c "
+        mkdir -p /app/backend/static &&
+        mkdir -p /app/backend/media &&
+        python manage.py makemigrations &&
+        python manage.py migrate &&
+        daphne -b 0.0.0.0 -p 8000 backend.asgi:application"
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      database:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mailhog:
+        condition: service_started
+    networks:
+      - app-network
+    restart: always
+#-------------------------------------------------------------------
+#----------------------------- FRONTEND -----------------------------
+  frontend:
+    container_name: frontend
+    build: ./frontend
+    image: frontend
+    env_file:
+      - .env
+    ports:
+      - "5173:5173"
+    networks:
+      - app-network
+    volumes:
+      - ./frontend:/app
+      - frontend_modules:/app/node_modules
+    restart: always
+    depends_on:
+      - backend
+#-------------------------------------------------------------------
+#----------------------------- ELASTICSEARCH -----------------------------
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.2
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - xpack.security.enrollment.enabled=false
+      - network.host=0.0.0.0
+    ports:
+      - "9200:9200"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+    restart: always
+#-------------------------------------------------------------------
+#----------------------------- LOGSTASH -----------------------------
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.12.2
+    container_name: logstash
+    ports:
+      - "12201:12201/udp"
+    volumes:
+      - ./devops/logstash/pipeline:/usr/share/logstash/pipeline
+      - ./security/nginx-server/nginx/logs:/var/log/nginx:ro
+    environment:
+      - LS_JAVA_OPTS=-Xms256m -Xmx256m
+    restart: always
+#-------------------------------------------------------------------
+#----------------------------- KIBANA -----------------------------
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.12.2
+    container_name: kibana
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    restart: always
+#-------------------------------------------------------------------
+#----------------------------- NGINX -----------------------------
+  nginx-server:
+    build: ./security/nginx-server
+    image: nginx-server
+    container_name: nginx-server
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./security/nginx-server/nginx/logs:/var/log/nginx
+      - ./security/nginx-server/modsecurity/logs:/var/log/modsecurity
+      - ./security/nginx-server/certificates:/etc/nginx/certificates
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "/bin/bash", "/usr/local/bin/healthcheck.sh"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+#-------------------------------------------------------------------
+#----------------------------- VAULT -----------------------------
+  vault:
+    build: ./security/hachiCorp-valut
+    image: vault
+    container_name: vault
+    env_file:
+      - .env
+    ports:
+      - "8200:8200"
+    user: root
+    volumes:
+      - ./security/hachiCorp-valut/config:/vault/config
+      - ./security/hachiCorp-valut/data:/vault/file
+    networks:
+      - app-network
+#-------------------------------------------------------------------
+#-------------------------------------------------------------------
+volumes:
+  frontend_modules:
+  postgres_data:
+  elasticsearch_data:
+  redis_data:
+  static_volume:
+  media_volume:
+
+networks:
+  app-network:
+    driver: bridge
